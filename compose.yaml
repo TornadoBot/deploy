@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: tornadobot-db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  cached-audio-provider:
+    build:
+      context: ../CachedAudioProvider
+    container_name: cached-audio-provider
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      AUDIO_STORAGE_PATH: ${AUDIO_STORAGE_PATH}
+    volumes:
+      - audiofiles:/data/audio
+    depends_on:
+      - postgres
+    networks:
+      - internal
+    ports:
+      - "8080:8080"  # Optional: expose for local API testing
+
+networks:
+  internal:
+
+volumes:
+  dbdata:
+  audiofiles:
