@@ -23,6 +23,8 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       AUDIO_STORAGE_PATH: ${AUDIO_STORAGE_PATH}
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
     volumes:
       - audiofiles:/data/audio
     depends_on:
